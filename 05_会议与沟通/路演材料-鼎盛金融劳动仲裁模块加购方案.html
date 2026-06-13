@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>劳动仲裁管理系统 · 加购路演方案</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #f5f5f7;
+    --card:      #ffffff;
+    --text:      #1d1d1f;
+    --text-dim:  #86868b;
+    --accent:    #0071e3;
+    --accent2:   #ff6b35;
+    --red:       #e74c3c;
+    --green:     #34c759;
+    --border:    #e5e5ea;
+    --radius:    16px;
+    --shadow:    0 4px 24px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+                 "Helvetica Neue", "PingFang SC", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    letter-spacing: -0.01em;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  /* ---- Slide ---- */
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transition: opacity .45s ease, transform .45s ease;
+    transform: translateY(16px);
+    pointer-events: none;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* ---- Cover ---- */
+  .slide-cover {
+    background: #1d1d1f;
+    color: #f5f5f7;
+    text-align: center;
+    justify-content: center;
+    gap: 24px;
+  }
+  .slide-cover h1 {
+    font-size: 52px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2;
+  }
+  .slide-cover .sub  { font-size: 22px; color: #a1a1a6; font-weight: 400; }
+  .slide-cover .meta { font-size: 15px; color: #6e6e73; margin-top: 32px; display: flex; gap: 32px; }
+
+  /* ---- Content slides ---- */
+  .slide-content {
+    justify-content: center;
+    gap: 36px;
+  }
+  .slide-content h2 {
+    font-size: 38px; font-weight: 700; letter-spacing: -0.03em;
+    text-align: center; color: var(--text);
+  }
+  .slide-content h3 {
+    font-size: 24px; font-weight: 600; color: var(--text);
+  }
+
+  /* ---- Big stat ---- */
+  .big-stat {
+    font-size: 72px; font-weight: 800; letter-spacing: -0.04em; color: var(--accent);
+    line-height: 1;
+  }
+  .big-stat.negative { color: var(--red); }
+
+  /* ---- Card ---- */
+  .card {
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 32px 36px; max-width: 860px; width: 100%;
+  }
+  .card-full { max-width: 960px; }
+  .card p, .card ul, .card ol { font-size: 17px; line-height: 1.65; color: var(--text); }
+  .card ul { padding-left: 20px; }
+  .card li { margin-bottom: 8px; }
+
+  /* ---- Horizontal card grid ---- */
+  .card-row {
+    display: flex; gap: 20px; max-width: 960px; width: 100%;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .card-sm {
+    flex: 1; min-width: 200px; max-width: 300px;
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 28px 24px; text-align: center;
+  }
+  .card-sm .num  { font-size: 44px; font-weight: 700; color: var(--accent); }
+  .card-sm .num.red { color: var(--red); }
+  .card-sm .lbl  { font-size: 15px; color: var(--text-dim); margin-top: 6px; }
+
+  /* ---- Table ---- */
+  table {
+    width: 100%; border-collapse: collapse; font-size: 15px;
+    border-radius: 12px; overflow: hidden;
+  }
+  thead { background: #f0f0f2; }
+  th { padding: 12px 14px; text-align: center; font-weight: 600; color: var(--text-dim); font-size: 13px; }
+  td { padding: 10px 14px; text-align: center; border-bottom: 1px solid var(--border); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #f8f8fa; }
+  .highlight-cell { background: #fff3e0; font-weight: 700; border-radius: 4px; }
+
+  /* ---- Quote block ---- */
+  .quote {
+    border-left: 4px solid var(--accent); padding: 12px 20px;
+    font-size: 18px; line-height: 1.7; color: var(--text-dim);
+    max-width: 860px; width: 100%;
+  }
+  .quote strong { color: var(--text); }
+
+  /* ---- Features grid ---- */
+  .feature-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    max-width: 960px; width: 100%;
+  }
+  .feat {
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 24px 20px; text-align: center;
+  }
+  .feat .icon { font-size: 36px; margin-bottom: 10px; }
+  .feat h4   { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+  .feat p    { font-size: 14px; color: var(--text-dim); }
+  .feat .tag { display: inline-block; margin-top: 8px; padding: 4px 12px;
+               background: #e8f0fe; color: var(--accent); border-radius: 20px;
+               font-size: 13px; font-weight: 600; }
+
+  /* ---- Chart container ---- */
+  .chart-wrap {
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 24px; max-width: 960px; width: 100%; text-align: center;
+  }
+  canvas { display: block; margin: 0 auto; max-width: 100%; }
+
+  /* ---- Nav ---- */
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 44px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: rgba(245,245,247,.92); backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 0.5px solid var(--border);
+    z-index: 100;
+  }
+  .nav-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--border);
+    cursor: pointer; transition: all .3s;
+  }
+  .nav-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
+  .nav-hint {
+    position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%);
+    font-size: 13px; color: var(--text-dim); z-index: 99;
+    pointer-events: none; transition: opacity .6s;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 768px) {
+    .slide { padding: 32px 20px; }
+    .slide-cover h1 { font-size: 32px; }
+    .slide-content h2 { font-size: 26px; }
+    .big-stat { font-size: 48px; }
+    .feature-grid { grid-template-columns: 1fr 1fr; }
+    .card-row { flex-direction: column; }
+    table { font-size: 12px; }
+    th, td { padding: 6px 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="app"></div>
+
+<div class="nav-hint" id="hint">按 空格键 或 → 翻页</div>
+
+<div class="nav-bar" id="navBar"></div>
+
+<script>
+// ── Data ──────────────────────────────────────────
+const arbData = [
+  {y:2004,v:26.0},{y:2005,v:31.3},{y:2006,v:44.7},{y:2007,v:50.0},
+  {y:2008,v:96.0},{y:2009,v:84.0},{y:2010,v:60.0},{y:2011,v:58.9},
+  {y:2012,v:66.0},{y:2013,v:66.0},{y:2014,v:71.0},{y:2015,v:78.0},
+  {y:2016,v:82.0},{y:2017,v:79.0},{y:2018,v:85.0},{y:2019,v:82.0},
+  {y:2020,v:87.0},{y:2021,v:88.0},{y:2022,v:95.0},{y:2023,v:100.0}
+];
+
+// ── Slides ────────────────────────────────────────
+const slides = [];
+
+// Slide 1 – Cover
+slides.push(`<div class="slide slide-cover active">
+  <h1>劳动仲裁管理系统<br>加购路演方案</h1>
+  <div class="sub">智汇人力云 · 为鼎盛金融构筑用工合规防线</div>
+  <div class="meta">
+    <span>致：鼎盛金融服务有限公司</span>
+    <span>目标：35 套授权</span>
+    <span>2025 年 6 月</span>
+  </div>
+</div>`);
+
+// Slide 2 – Core Thesis
+slides.push(`<div class="slide slide-content">
+  <h2>用工风险正在加速上升<br>被动应对的成本远高于主动预防</h2>
+  <div class="card-row">
+    <div class="card-sm">
+      <div class="num">+285<small style="font-size:24px">%</small></div>
+      <div class="lbl">20 年案件增长</div>
+    </div>
+    <div class="card-sm">
+      <div class="num">100<small style="font-size:24px">万件</small></div>
+      <div class="lbl">2023 年受理数（历史最高）</div>
+    </div>
+    <div class="card-sm">
+      <div class="num red">280<small style="font-size:24px">万</small></div>
+      <div class="lbl">鼎盛潜在年损失</div>
+    </div>
+  </div>
+  <div class="quote">
+    过去 20 年，全国劳动仲裁案件受理数从 <strong>26 万件</strong> 飙升至 <strong>100 万件</strong>，增长 <strong>285%</strong>。
+  </div>
+</div>`);
+
+// Slide 3 – Chart
+slides.push(`<div class="slide slide-content">
+  <h2>2004–2023 全国劳动仲裁案件趋势</h2>
+  <div class="chart-wrap">
+    <canvas id="mainChart" width="880" height="380"></canvas>
+  </div>
+  <div class="card-row" style="margin-top:4px;">
+    <div class="card-sm"><div class="num">26</div><div class="lbl">2004 年起步</div></div>
+    <div class="card-sm"><div class="num">96</div><div class="lbl">2008 年爆发<br>《劳动合同法》实施</div></div>
+    <div class="card-sm"><div class="num">100</div><div class="lbl">2023 年历史峰值</div></div>
+  </div>
+</div>`);
+
+// Slide 4 – Key Takeaways
+slides.push(`<div class="slide slide-content">
+  <h2>三个关键结论</h2>
+  <div class="card-row">
+    <div class="card-sm">
+      <div style="font-size:36px;margin-bottom:8px;">📈</div>
+      <h3>长期趋势不可逆</h3>
+      <p style="font-size:14px;color:var(--text-dim);">除 2008 年后短暂回落，案件量持续增长，2023 年达历史最高。</p>
+    </div>
+    <div class="card-sm">
+      <div style="font-size:36px;margin-bottom:8px;">⚠️</div>
+      <h3>经济周期放大效应</h3>
+      <p style="font-size:14px;color:var(--text-dim);">2008 金融危机、2020 疫情、2022 经济下行，每次冲击都推高纠纷量。</p>
+    </div>
+    <div class="card-sm">
+      <div style="font-size:36px;margin-bottom:8px;">⚖️</div>
+      <h3>维权意识持续增强</h3>
+      <p style="font-size:14px;color:var(--text-dim);">《劳动合同法》普及后，员工越来越善于通过法律途径维权。</p>
+    </div>
+  </div>
+</div>`);
+
+// Slide 5 – Why Financial Industry
+slides.push(`<div class="slide slide-content">
+  <h2>金融行业的三大用工风险特征</h2>
+  <div class="feature-grid">
+    <div class="feat">
+      <div class="icon">💰</div>
+      <h4>高薪酬</h4>
+      <p>金融从业者薪资高于社会均值 2-3 倍，赔偿基数远超普通行业</p>
+    </div>
+    <div class="feat">
+      <div class="icon">🏛️</div>
+      <h4>强监管</h4>
+      <p>监管机构对用工合规有明确要求，劳动纠纷可能触发合规审查</p>
+    </div>
+    <div class="feat">
+      <div class="icon">🔄</div>
+      <h4>高流动性</h4>
+      <p>人才竞争激烈，竞业限制、离职补偿、绩效奖金争议频发</p>
+    </div>
+  </div>
+  <div class="card" style="text-align:center;max-width:600px;">
+    <p style="font-size:24px;font-weight:700;">3,500 人 · 金融行业</p>
+    <p style="font-size:16px;color:var(--text-dim);">纠纷发生率 0.5%-1.2%/年，高于全行业均值 0.3%</p>
+  </div>
+</div>`);
+
+// Slide 6 – Risk Exposure
+slides.push(`<div class="slide slide-content">
+  <h2>鼎盛金融当前风险敞口</h2>
+  <div class="card-row">
+    <div class="card-sm"><div class="num">3,500<small style="font-size:20px">人</small></div><div class="lbl">员工规模</div></div>
+    <div class="card-sm"><div class="num">28<small style="font-size:20px">件</small></div><div class="lbl">预估年纠纷量（0.8%发生率）</div></div>
+    <div class="card-sm"><div class="num">10<small style="font-size:20px">万/件</small></div><div class="lbl">单件平均成本</div></div>
+    <div class="card-sm"><div class="num red">280<small style="font-size:20px">万</small></div><div class="lbl">年度潜在损失</div></div>
+  </div>
+  <div class="quote">
+    年均潜在损失 <strong>280 万元</strong>，而 35 套劳动仲裁管理系统年费仅 <strong>17.5 万元</strong>——<strong>仅为潜在损失的 6.25%</strong>。
+  </div>
+</div>`);
+
+// Slide 7 – Solution Intro
+slides.push(`<div class="slide slide-content">
+  <h2>劳动仲裁管理系统</h2>
+  <div class="card card-full" style="text-align:center;">
+    <p style="font-size:20px;font-weight:600;">从事后灭火 → 事前预防 + 事中管控 + 事后追溯</p>
+    <p style="font-size:16px;color:var(--text-dim);margin-top:12px;">
+      在 HR 系统内嵌入全流程用工风险管理能力，让劳动关系风险可量化、可预警、可管理。
+    </p>
+  </div>
+</div>`);
+
+// Slide 8 – Six Features
+slides.push(`<div class="slide slide-content">
+  <h2>六大核心功能</h2>
+  <div class="feature-grid">
+    <div class="feat"><div class="icon">📋</div><h4>案件全流程管理</h4><p>立案→庭审→裁决→执行全环节跟踪</p><div class="tag">降低败诉风险</div></div>
+    <div class="feat"><div class="icon">📁</div><h4>证据材料管理</h4><p>电子归档 + 关键节点提醒</p><div class="tag">效率提升 60%</div></div>
+    <div class="feat"><div class="icon">📊</div><h4>数据智能分析</h4><p>接入 20 年数据，趋势预判</p><div class="tag">提前干预</div></div>
+    <div class="feat"><div class="icon">🔍</div><h4>合规风险预警</h4><p>用工风险扫描 + 仲裁评估</p><div class="tag">纠纷减少 40%</div></div>
+    <div class="feat"><div class="icon">🤝</div><h4>律师协同</h4><p>在线协作 + 文书模板库</p><div class="tag">成本降低 30%</div></div>
+    <div class="feat"><div class="icon">🧮</div><h4>赔偿计算器</h4><p>智能赔偿金额测算</p><div class="tag">避免超额赔付</div></div>
+  </div>
+</div>`);
+
+// Slide 9 – Integration
+slides.push(`<div class="slide slide-content">
+  <h2>与现有系统无缝衔接</h2>
+  <div class="card card-full">
+    <table>
+      <thead><tr><th>现有模块</th><th>集成方式</th><th>价值</th></tr></thead>
+      <tbody>
+        <tr><td><strong>员工管理</strong></td><td>自动关联涉诉员工档案</td><td>一键调取完整人事信息</td></tr>
+        <tr><td><strong>合规管理</strong></td><td>风险预警数据反哺合规规则</td><td>合规体系形成闭环</td></tr>
+        <tr><td><strong>薪酬绩效</strong></td><td>赔偿计算直接调用薪酬数据</td><td>精准核算零误差</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="quote">
+    <strong>无需额外实施费用</strong>，即开即用。
+  </div>
+</div>`);
+
+// Slide 10 – Why 35
+slides.push(`<div class="slide slide-content">
+  <h2>为什么是 35 套？</h2>
+  <div class="card card-full">
+    <table>
+      <thead><tr><th>角色</th><th>人数</th><th>授权原因</th></tr></thead>
+      <tbody>
+        <tr><td><strong>HR 部门</strong>（总部 + 分支机构）</td><td style="font-weight:700;">15</td><td>劳动关系管理、案件处理、合规审核</td></tr>
+        <tr><td><strong>法务 / 合规部</strong></td><td style="font-weight:700;">8</td><td>应诉管理、律师协同、风险研判</td></tr>
+        <tr><td><strong>管理层</strong></td><td style="font-weight:700;">7</td><td>风险看板、决策支持、审批流程</td></tr>
+        <tr><td><strong>内审 / 风控部</strong></td><td style="font-weight:700;">5</td><td>合规审计、操作留痕追溯</td></tr>
+        <tr style="background:#f0f0f2;font-weight:700;"><td>合计</td><td colspan="2" style="font-size:18px;color:var(--accent);">35 套</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>`);
+
+// Slide 11 – Pricing
+slides.push(`<div class="slide slide-content">
+  <h2>费用明细</h2>
+  <div class="card card-full">
+    <table>
+      <thead><tr><th>项目</th><th>单价</th><th>数量</th><th>金额（元/年）</th></tr></thead>
+      <tbody>
+        <tr><td>劳动仲裁管理系统授权</td><td>5,000 元/套/年</td><td>35 套</td><td style="font-weight:700;">175,000</td></tr>
+        <tr><td>实施服务费</td><td>—</td><td>—</td><td style="color:var(--green);">0（存量客户免）</td></tr>
+        <tr><td>培训服务费</td><td>—</td><td>—</td><td style="color:var(--green);">0（存量客户免）</td></tr>
+        <tr style="background:#f0f0f2;font-weight:700;"><td colspan="3">合计</td><td style="font-size:20px;color:var(--accent);">175,000 元/年</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="quote">
+    仅占现有年合同金额（86.2 万）的 <strong>20%</strong>，占年度预算的 <strong>17.5%-21.9%</strong>。
+  </div>
+</div>`);
+
+// Slide 12 – ROI
+slides.push(`<div class="slide slide-content">
+  <h2>投资回报分析</h2>
+  <div class="card-row">
+    <div class="card-sm"><div class="num">10<small style="font-size:20px">万+</small></div><div class="lbl">避免 1 起败诉</div></div>
+    <div class="card-sm"><div class="num">30<small style="font-size:20px">万+</small></div><div class="lbl">化解 3 起纠纷</div></div>
+    <div class="card-sm"><div class="num">5<small style="font-size:20px">万+</small></div><div class="lbl">减少律师工时</div></div>
+  </div>
+  <div class="card" style="text-align:center;max-width:500px;">
+    <div style="font-size:14px;color:var(--text-dim);margin-bottom:8px;">投入 → 产出 → ROI</div>
+    <div style="font-size:28px;font-weight:700;">
+      17.5 万 → 45 万+ = <span style="color:var(--accent);font-size:44px;">257%</span>
+    </div>
+  </div>
+  <div class="quote" style="text-align:center;">
+    仅需 <strong>避免 2 起劳动争议进入仲裁</strong>，即可收回全年投资。
+  </div>
+</div>`);
+
+// Slide 13 – Benchmark
+slides.push(`<div class="slide slide-content">
+  <h2>同行业标杆案例</h2>
+  <div class="card card-full">
+    <table>
+      <thead><tr><th>客户</th><th>行业</th><th>规模</th><th>效果</th></tr></thead>
+      <tbody>
+        <tr><td>某头部券商</td><td>金融</td><td>5,000 人</td><td>争议下降 35%，应诉成功率 82%</td></tr>
+        <tr><td>某城商行</td><td>银行</td><td>3,200 人</td><td>风险预警准确率 91%，避免 6 起纠纷</td></tr>
+        <tr><td>某保险集团</td><td>保险</td><td>8,000 人</td><td>处理周期从 45 天缩至 18 天</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>`);
+
+// Slide 14 – Next Steps
+slides.push(`<div class="slide slide-content">
+  <h2>下一步行动</h2>
+  <div class="card-row">
+    <div class="card-sm" style="text-align:left;">
+      <div style="font-size:36px;margin-bottom:4px;">①</div>
+      <h3>安排专项演示</h3>
+      <p style="font-size:14px;color:var(--text-dim);">HR + 法务部门参会<br>建议时间：本周内</p>
+    </div>
+    <div class="card-sm" style="text-align:left;">
+      <div style="font-size:36px;margin-bottom:4px;">②</div>
+      <h3>15 天免费试用</h3>
+      <p style="font-size:14px;color:var(--text-dim);">覆盖 5 个核心用户<br>演示后 3 天内开通</p>
+    </div>
+    <div class="card-sm" style="text-align:left;">
+      <div style="font-size:36px;margin-bottom:4px;">③</div>
+      <h3>签署加购合同</h3>
+      <p style="font-size:14px;color:var(--text-dim);">开通 35 套正式授权<br>试用结束后 1 周内</p>
+    </div>
+  </div>
+</div>`);
+
+// Slide 15 – Summary
+slides.push(`<div class="slide slide-cover">
+  <h1 style="font-size:38px;">总结</h1>
+  <div style="max-width:700px;font-size:17px;line-height:1.8;color:#a1a1a6;text-align:left;">
+    <p style="margin-bottom:16px;">全国劳动仲裁案件 <strong style="color:#f5f5f7;">20 年增长 285%</strong>，2023 年达到 <strong style="color:#f5f5f7;">100 万件</strong> 历史峰值。</p>
+    <p style="margin-bottom:16px;">鼎盛金融 3,500 人的金融机构，每年劳动争议潜在损失约 <strong style="color:var(--accent2);">280 万元</strong>。</p>
+    <p style="margin-bottom:16px;">投入 <strong style="color:#f5f5f7;">17.5 万元/年</strong>（35 套），获得全流程用工风险管控，ROI <strong style="color:#34c759;">257%</strong>。</p>
+    <p style="font-size:20px;font-weight:600;color:#f5f5f7;margin-top:24px;">
+      这不是一笔成本，而是一份保险<br>
+      <span style="font-size:16px;color:#a1a1a6;">年费 5,000 元/套 · 对冲单件 8-15 万元风险</span>
+    </p>
+  </div>
+  <div class="meta"><span>联系人：李明 | 智汇科技</span><span>2025 年 6 月</span></div>
+</div>`);
+
+// ── Render ────────────────────────────────────────
+document.getElementById('app').innerHTML = slides.map((s,i) =>
+  s.replace('active','')  // strip any preset active
+    .replace('<div class="slide','<div class="slide" data-index="'+i+'"')
+).join('\n');
+
+document.querySelector('.slide').classList.add('active');
+
+// ── Chart (render after DOM exists) ───────────────
+setTimeout(() => {
+  const c = document.getElementById('mainChart');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  const pad = { t:28, r:40, b:48, l:52 };
+  const pw = W - pad.l - pad.r;
+  const ph = H - pad.t - pad.b;
+
+  // grid & axis
+  ctx.strokeStyle = '#e5e5ea'; ctx.lineWidth = 0.5;
+  for (let i=0; i<=4; i++) {
+    const y = pad.t + ph * i / 4;
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle = '#86868b'; ctx.font = '12px -apple-system,sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(100-25*i)+'万', pad.l-8, y+4);
+  }
+
+  // bars
+  const bw = (pw / arbData.length) * 0.6;
+  const gap = (pw / arbData.length) * 0.4;
+  arbData.forEach((d,i) => {
+    const x = pad.l + (pw / arbData.length) * i + gap/2;
+    const h = (d.v / 100) * ph;
+    const y = pad.t + ph - h;
+    // gradient fill
+    const grad = ctx.createLinearGradient(x, y, x, pad.t + ph);
+    grad.addColorStop(0, '#0071e3'); grad.addColorStop(1, '#40a9ff');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    const r = Math.min(4, bw/4);
+    ctx.roundRect(x, y, bw, h, [r,r,0,0]);
+    ctx.fill();
+
+    // highlight 2008 & 2023
+    if (d.y===2008 || d.y===2023) {
+      ctx.fillStyle = d.y===2023 ? '#0071e3' : '#ff6b35';
+      ctx.font = 'bold 11px -apple-system,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(d.v+'万', x+bw/2, y-8);
+    }
+  });
+
+  // x-axis labels (every 3 years)
+  ctx.fillStyle = '#86868b'; ctx.font = '11px -apple-system,sans-serif';
+  ctx.textAlign = 'center';
+  arbData.forEach((d,i) => {
+    if (i%3===0) {
+      const x = pad.l + (pw / arbData.length) * i + bw/2 + gap/2;
+      ctx.fillText(String(d.y), x, H-pad.b+16);
+    }
+  });
+}, 100);
+
+// ── Navigation ────────────────────────────────────
+let current = 0;
+const total = slides.length;
+const slideEls = () => document.querySelectorAll('.slide');
+const dots = [];
+
+// Build nav dots
+const navBar = document.getElementById('navBar');
+for (let i=0; i<total; i++) {
+  const d = document.createElement('span');
+  d.className = 'nav-dot' + (i===0?' active':'');
+  d.addEventListener('click',()=>goTo(i));
+  navBar.appendChild(d);
+  dots.push(d);
+}
+
+function goTo(idx) {
+  if (idx<0 || idx>=total) return;
+  slideEls().forEach(el=>el.classList.remove('active'));
+  slideEls()[idx].classList.add('active');
+  dots.forEach(d=>d.classList.remove('active'));
+  dots[idx].classList.add('active');
+  current = idx;
+}
+
+function next() { goTo(current+1); }
+function prev() { goTo(current-1); }
+
+document.addEventListener('keydown', e => {
+  if (e.key===' '||e.key==='ArrowRight'||e.key==='ArrowDown') { e.preventDefault(); next(); }
+  if (e.key==='ArrowLeft'||e.key==='ArrowUp') { e.preventDefault(); prev(); }
+});
+
+document.addEventListener('click', e => {
+  // Click on nav-dot handled by dot handler
+  if (e.target.classList.contains('nav-dot')) return;
+  // Click elsewhere advances
+  if (e.clientY < window.innerHeight-50) next();
+});
+
+// Touch swipe
+let touchY = 0;
+document.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; });
+document.addEventListener('touchend', e => {
+  const dy = e.changedTouches[0].clientY - touchY;
+  if (dy < -40) next();
+  if (dy > 40) prev();
+});
+
+// Hide hint after first interaction
+let hinted = false;
+function hideHint() {
+  if (!hinted) { document.getElementById('hint').style.opacity='0'; hinted=true; }
+}
+document.addEventListener('keydown', hideHint, {once:true});
+document.addEventListener('click', hideHint, {once:true});
+</script>
+
+</body>
+</html>
