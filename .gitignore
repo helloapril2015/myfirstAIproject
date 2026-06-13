@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# 临时文件
+*~
+*.tmp
+*.bak
+*.backup
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 二进制/媒体文件（根据需求调整）
+# *.docx
+# *.xlsx
+# *.pptx
+# *.jpg
+# *.png
+# *.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
